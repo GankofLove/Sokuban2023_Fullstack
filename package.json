@@ -1,0 +1,16 @@
+{
+  "name": "sokuban2023_fullstack",
+  "version": "1.0.0",
+  "description": "Jan Schneider",
+  "main": "index.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Jan Schneider",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
