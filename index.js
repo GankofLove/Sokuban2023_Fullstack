@@ -29,7 +29,7 @@ function readLevelData() {
         // speichern der Zeichen um später besser damit arbeiten zu können
         const char = lines[y][x];
 
-        // 
+        // Zeichen definieren
         switch(char) {
           case '@':
               line.push('-');
@@ -62,13 +62,29 @@ function readLevelData() {
 }
 
 readLevelData();
-console.log(levels[2]);
 
 const app = express()
 const port = 8080
 
+// sorgt dafür, dass die Daten welche empfangen/gesendet werden JSON sind
+app.get(express.json());
+
+// Route für die REST API zum ansprechen
+app.get('/api/levels', (req, res) => {
+  // Anzahl der existierenden Levels übertrage
+  res.send({count: levels.length});
+});
+
+// Route2 für XXXX
+app.get('/api/levels/:levelID', (req, res) => { //  alles was hinter dem Doppelpunkt sehtht, wird als variable gespeichert
+const levelID = req.params.levelID;
+  console.log(req);
+  res.send(levels[levelID]);
+});
+
 app.use(express.static('public')) // code line von express homepage kopiert
 
+// Ausgabe
 app.listen(port, () => {
   console.log(`Sokuban Server listening on port ${port}`);
 });

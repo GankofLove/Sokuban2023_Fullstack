@@ -17,25 +17,25 @@
 
 ## **EH18** - 20.06.2023
 
-(Sollte Sourcetree nicht öffnen; in den Ordner navigieren: "C:\Users\jansc\AppData\Local\Atlassian" und den zweiten Ordner löschen (Ordner mit langen Namen // dieser wird beim erneuten Starten wieder erstellt. Ab Sourcetree lässt sich wieder öffnen... kA warum das Problem besteht. Das ist die Lösung))
+(Sollte Sourcetree nicht öffnen; in den Ordner navigieren: "C:\Users\jansc\AppData\Local\Atlassian" und den zweiten Ordner löschen (Ordner mit langen Namen // dieser wird beim erneuten Starten wieder erstellt. Ab Sourcetree lässt sich wieder öffnen... kA warum das Problem besteht - Vermutung: Sourcetree Update verk***t.))
 
 * Server muss erneut gestartet werden: VSC Terminal/node: npm start
 * Server stoppen Shortcurt: STRG + C
 * Damit Anderungen übernommen werden, muss der Server Neu gestartet werden bzw. offline lassen bis gebraucht.
 
-13. Sourcetree: unstaged Files committen. (Notizen hinzufügen und rechts unten auf "commit" drücken)
-14. Sourcetree: Pushen
-15. (Sollte das puschen nicht funktionieren, im Sourcetree/Tools/Options: SSH Client: auf "OpenSSH" stellen) // Alternativ über das Terminal: "git push???" // VS Code/node Terminal Befehel zum Thema Pushen/committen etc anschaun!
-16. "sokuban-assets.zip" von Teams WEB Chat herunterladen
-17. "assets" Ordner auf Hauptebene des Projekts erstellen und die entpackten Datein einfügen
-18. Eingefügte Datei "level.txt" auf "levels.txt" umbenennen
+1.  Sourcetree: unstaged Files committen. (Notizen hinzufügen und rechts unten auf "commit" drücken)
+2.  Sourcetree: Pushen
+3.  (Sollte das puschen nicht funktionieren, im Sourcetree/Tools/Options: SSH Client: auf "OpenSSH" stellen) // Alternativ über das Terminal: "git push???" // VS Code/node Terminal Befehel zum Thema Pushen/committen etc anschaun!
+4.  "sokuban-assets.zip" von Teams WEB Chat herunterladen
+5.  "assets" Ordner auf Hauptebene des Projekts erstellen und die entpackten Datein einfügen
+6.  Eingefügte Datei "level.txt" auf "levels.txt" umbenennen
 
 <br>
 
 ---
 
-## **Aufgabe 1**
-Levels mit dem Server verbinden + interpretieren lassen - genaue Anleitung siehe Folie Anderl
+## **Aufgabe 1** Folie: Teil2 - Spielfeld einlesen, REST API
+Levels mit dem Server verbinden + interpretieren lassen
 
 * Jedes Level einzeln als objekt definieren (2d Arry), Spieler defnieren, Kisten definieren. Funktion für Interpreation der Strings/Zeichen (levels.txt Datei) erstellen: "Level, Player, Boxes" sollen für alle Levels sinnvoll interpretiert werden.
 
@@ -48,9 +48,16 @@ Levels mit dem Server verbinden + interpretieren lassen - genaue Anleitung siehe
 5. Funktion erstellen: <br>
    * Schritt1: levelData in einzelne Levels zerlegen <br>
    * Schritt2: für jedes Level die Daten Zeichen für Zeichen durchgehen und in gewünschte Struktur übertragen
+   * XXXXXXXX
 
 
 ```js
 // code zum zerteilen der einzelnen level:
 
 const splitLevelData = levelData.split('\n\n');
+```
+
+---
+
+6. Anzahl der Levels in ein Objekt wandeln (zum zähen der Levels via Browser URL "localhost:8080" eingeben // oder mit Postmann)
+7. Routs 
