@@ -142,4 +142,14 @@ window.onload = function() {
 ```
 
 
-11. 
+1.  Frontend "index.js" Datei: Spielfiguren einzeichnen:
+```js
+ drawTile('player', level.player.x, level.player.y);
+```
+
+1.  Frontend "index.js" Datei: Kisten/Boxen einzeichen (mit `for of` Schleife):
+```js
+for (let box of level.boxes) {
+drawTile ('box', box.x, box.y);
+}
+```

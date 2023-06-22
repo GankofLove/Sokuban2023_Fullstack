@@ -1,5 +1,6 @@
 window.onload = function() {
 
+    // 
     const TILE_SIZE = 32;
     const IMAGES = {
         '#': 'url(/assets/flat/wall.png)', 
@@ -10,32 +11,48 @@ window.onload = function() {
         box: 'url(/assets/flat/box.png)',
     };
 
-
+    // 
     async function loadLevel(LevelID) {
         const response = await fetch(`/api/levels/${LevelID}`);
         const level = await response.json();
 
         const playfield = document.getElementById('playfield');
 
-        for (let y = 0; y < level.level.length; y += 1) {
-            for (let x = 0; x < level.level[y].length; x += 1) {
-                const char = level.level[y][x];
-
-                const tile = document.createElement('div');
+        // Funktion
+        function drawTile(image, x, y) {
+            const tile = document.createElement('div');
                 tile.className = 'tile';
                 tile.style.width = `${TILE_SIZE}px`;
                 tile.style.height = `${TILE_SIZE}px`;
                 tile.style.top = `${y * TILE_SIZE}px`;
                 tile.style.left = `${x * TILE_SIZE}px`;
 
-                tile.style.backgroundImage = IMAGES [char];
+                tile.style.backgroundImage = IMAGES[image];
 
                 playfield.appendChild(tile);
+        }
+
+        // 
+        for (let y = 0; y < level.level.length; y += 1) {
+            for (let x = 0; x < level.level[y].length; x += 1) {
+                const char = level.level[y][x];
+
+                drawTile(char, x, y);
             }
         }
 
+        // Spieler zeichnen
+        drawTile('player', level.player.x, level.player.y);
+
+        // Boxes zeichen
+        for (let box of level.boxes) {
+            drawTile ('box', box.x, box.y);
+        }
+
+        // Ausgabe 
         console.log(level);
     }
 
+    // 
     loadLevel(2);
 }
