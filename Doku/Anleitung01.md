@@ -57,7 +57,16 @@ Levels mit dem Server verbinden + interpretieren lassen
 const splitLevelData = levelData.split('\n\n');
 ```
 
+6. levels.txt Datei einlesen und interpretieren - index.js: `splitLevelData` Array - `const lines` 2d Array - mit `for`schleife iterieren - Anzahl der Levels in ein Objekt wandeln (zum zähen der Levels via Browser URL "localhost:8080" eingeben // oder mit Postmann)
+7. Variable `line` anlegen. Zeile für das level vorbeireiten - interieren über die einzelnen Charackters. Strings kann man wie Arrays behandeln (Strings mit forschleife iterieren) - char in eine Variable speichern `const char = line`
+8. Routs (Level REST APIs) let express read request bodies as json - 1. Rest API GET api/levels - returns count of levels - 2. Rest API: GET /api/levels/:levelID - returns selected level
+
+<br>
+
 ---
 
-6. Anzahl der Levels in ein Objekt wandeln (zum zähen der Levels via Browser URL "localhost:8080" eingeben // oder mit Postmann)
-7. Routs 
+## **EH19** - 22.06.23 - Spielfeld zeichnen, Spieler bewegen
+
+9. Neuen Branch via. Github/Sourcetree einbinden (extra zum üben der Version controll) // kann man via Terminal oder mit Sourcetree machen // 
+10. 
+11. 
