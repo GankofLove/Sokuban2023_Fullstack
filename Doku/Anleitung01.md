@@ -137,19 +137,61 @@ window.onload = function() {
 10. Das Level optisch gestalten // in der Frontend "index.js" Datei eine `for` Schleife zum...
 
 ```js 
+for (let y = 0; y < level.level.length; y += 1) {
+   for (let x = 0; x < level.level[y].length; x += 1) {
+      const char = level.level[y][x];
 
+      drawTile(char, x, y);
+   }
+}
 
 ```
 
 
-1.  Frontend "index.js" Datei: Spielfiguren einzeichnen:
+11.  Frontend "index.js" Datei: Spielfiguren einzeichnen:
 ```js
  drawTile('player', level.player.x, level.player.y);
 ```
 
-1.  Frontend "index.js" Datei: Kisten/Boxen einzeichen (mit `for of` Schleife):
+12.  Frontend "index.js" Datei: Kisten/Boxen einzeichen (mit `for of` Schleife):
 ```js
 for (let box of level.boxes) {
 drawTile ('box', box.x, box.y);
 }
 ```
+
+13. Die Pfeiltasten der Tastertur dem Spieler zuweisen // Frontende "index.js" Datei: Keylistener einbauen
+```js 
+    document.addEventListener('keydown', (event) => {
+        console.log(event);
+
+        switch (event.code) {
+            case 'ArrwoUP':
+            case 'KeyW':
+
+            case 'ArrwoDown':
+            case 'KeyS':
+
+            case 'ArrwoLeft':
+            case 'KeyA':
+
+            case 'ArrwoRight':
+            case 'KeyD':
+
+                break;
+            default:
+                break;
+        }
+
+    });
+```
+1.  Frontend "index.js" Datei code umschreiben // loadlevel funktion kann nun auch außerhalb verwendet werden
+```js
+// ganz oben im Code umschrieben:
+window.onload = async function () {
+
+// weiter unten im Code umschreiben:
+const level = await loadLevel(2);
+
+```
+

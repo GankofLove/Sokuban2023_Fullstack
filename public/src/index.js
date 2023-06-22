@@ -1,9 +1,9 @@
-window.onload = function() {
+window.onload = async function () {
 
     // 
     const TILE_SIZE = 32;
     const IMAGES = {
-        '#': 'url(/assets/flat/wall.png)', 
+        '#': 'url(/assets/flat/wall.png)',
         '-': 'url(/assets/flat/floor.png)',
         '_': 'url(/assets/flat/grass.png)',
         '.': 'url(/assets/flat/target.png)',
@@ -21,15 +21,16 @@ window.onload = function() {
         // Funktion
         function drawTile(image, x, y) {
             const tile = document.createElement('div');
-                tile.className = 'tile';
-                tile.style.width = `${TILE_SIZE}px`;
-                tile.style.height = `${TILE_SIZE}px`;
-                tile.style.top = `${y * TILE_SIZE}px`;
-                tile.style.left = `${x * TILE_SIZE}px`;
+            tile.className = 'tile';
+            tile.style.width = `${TILE_SIZE}px`;
+            tile.style.height = `${TILE_SIZE}px`;
+            tile.style.top = `${y * TILE_SIZE}px`;
+            tile.style.left = `${x * TILE_SIZE}px`;
 
-                tile.style.backgroundImage = IMAGES[image];
+            tile.style.backgroundImage = IMAGES[image];
 
-                playfield.appendChild(tile);
+            playfield.appendChild(tile);
+            return tile;
         }
 
         // 
@@ -42,17 +43,50 @@ window.onload = function() {
         }
 
         // Spieler zeichnen
-        drawTile('player', level.player.x, level.player.y);
+        level.player.tile = drawTile('player', level.player.x, level.player.y);
 
         // Boxes zeichen
         for (let box of level.boxes) {
-            drawTile ('box', box.x, box.y);
+            box.tile = drawTile('box', box.x, box.y);
         }
 
         // Ausgabe 
         console.log(level);
+        return level;
     }
 
     // 
-    loadLevel(2);
+    const level = await loadLevel(2);
+
+    // Eventlistener + Keymapping
+    document.addEventListener('keydown', (event) => {
+        console.log(event);
+
+        switch (event.code) {
+            case 'ArrowUp':
+            case 'KeyW':
+                level.player.y -= 1;
+                level.player.tile.style.top = `${level.player.y * TILE_SIZE}px`;
+                break;
+            case 'ArrowDown':
+            case 'KeyS':
+                level.player.y += 1;
+                level.player.tile.style.top = `${level.player.y * TILE_SIZE}px`;
+                break;
+            case 'ArrowLeft':
+            case 'KeyA':
+                level.player.x -= 1;
+                level.player.tile.style.left = `${level.player.x * TILE_SIZE}px`;
+                break;
+            case 'ArrowRight':
+            case 'KeyD':
+                level.player.x += 1;
+                level.player.tile.style.left = `${level.player.x * TILE_SIZE}px`;
+
+                break;
+            default:
+                break;
+        }
+
+    });
 }
