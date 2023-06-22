@@ -1,6 +1,9 @@
 # Anleitung: Projekt Erstellung Sokuban - mit Github und Sourcetree 
 
-## **EH17**
+## **EH17** - 15.06.23
+### **Teil 1 - Setup, express server**
+
+<br>
 
 2. Neues Git Repository auf Github erstellen
 3. SSH key von github clonen
@@ -14,8 +17,14 @@
 11. Statische Datein in Express einfügen - copy code from homepage - Express/Serving static files in Express 
 12. zum überprüfen im terminal: "npm start" - im suchleiste des browsers eingeben: "localhost8080" - "hallo welt" sollte geladen werden
 
+<br>
 
-## **EH18** - 20.06.2023
+---
+ 
+## **EH18** - 20.06.2023  
+### **Teil 1 - Setup, express server**
+
+<br>
 
 (Sollte Sourcetree nicht öffnen; in den Ordner navigieren: "C:\Users\jansc\AppData\Local\Atlassian" und den zweiten Ordner löschen (Ordner mit langen Namen // dieser wird beim erneuten Starten wieder erstellt. Ab Sourcetree lässt sich wieder öffnen... kA warum das Problem besteht - Vermutung: Sourcetree Update verk***t.))
 
@@ -32,9 +41,8 @@
 
 <br>
 
----
 
-## **Aufgabe 1** Folie: Teil2 - Spielfeld einlesen, REST API
+### **Folie: Teil 2 - Spielfeld einlesen, REST API**
 Levels mit dem Server verbinden + interpretieren lassen
 
 * Jedes Level einzeln als objekt definieren (2d Arry), Spieler defnieren, Kisten definieren. Funktion für Interpreation der Strings/Zeichen (levels.txt Datei) erstellen: "Level, Player, Boxes" sollen für alle Levels sinnvoll interpretiert werden.
@@ -57,16 +65,133 @@ Levels mit dem Server verbinden + interpretieren lassen
 const splitLevelData = levelData.split('\n\n');
 ```
 
-6. levels.txt Datei einlesen und interpretieren - index.js: `splitLevelData` Array - `const lines` 2d Array - mit `for`schleife iterieren - Anzahl der Levels in ein Objekt wandeln (zum zähen der Levels via Browser URL "localhost:8080" eingeben // oder mit Postmann)
-7. Variable `line` anlegen. Zeile für das level vorbeireiten - interieren über die einzelnen Charackters. Strings kann man wie Arrays behandeln (Strings mit forschleife iterieren) - char in eine Variable speichern `const char = line`
-8. Routs (Level REST APIs) let express read request bodies as json - 1. Rest API GET api/levels - returns count of levels - 2. Rest API: GET /api/levels/:levelID - returns selected level
+<br>
+
+----
+
+### **Wiederholung von EH18:** - Was haben wir in EH18 gemacht? - Mitschrift:
+
+1. levels.txt Datei einlesen und interpretieren - index.js: `splitLevelData` Array - `const lines` 2d Array - mit `for`schleife iterieren - Anzahl der Levels in ein Objekt wandeln (zum zähen der Levels via Browser URL "localhost:8080" eingeben // oder mit Postmann) <br>
+2. Variable `line` anlegen. Zeile für das level vorbeireiten - interieren über die einzelnen Charackters. Strings kann man wie Arrays behandeln (Strings mit forschleife iterieren) - char in eine Variable speichern `const char = line` <br>
+3. Routs (Level REST APIs) let express read request bodies as json - 1. Rest API GET api/levels - returns count of levels - 2. Rest API: GET /api/levels/:levelID - returns selected level
+4. XXXX
 
 <br>
 
----
 
-## **EH19** - 22.06.23 - Spielfeld zeichnen, Spieler bewegen
+<br>
 
-9. Neuen Branch via. Github/Sourcetree einbinden (extra zum üben der Version controll) // kann man via Terminal oder mit Sourcetree machen // 
-10. 
-11. 
+----
+
+
+## **EH19** - 22.06.23 
+
+### **Folie Teil 3 - Spielfeld zeichnen, Spieler bewegen**
+
+<br>
+
+
+1. Neuen Branch via. Github/Sourcetree/IDE einbinden (extra zum üben der Version controll) // kann man via Terminal oder mit Sourcetree machen // Komandozeiel: `git branch frontend` (branch erstellen) - `git checkout frontend` (wecheselt zum eben erstellten Branch) // Komandozeile: `git checkout -b frontend` (erstellt und wechselt auf den erstellten Branch)
+2. Heruntergelandener Ordner "assets" muss in den public Ordner verschoben werden. public Ordner ist alles was in das Frontend gehört - darum "public". // der "assets" ordner enthält die benötigten Bilder für das Spiel.
+3. Frontend soll die API ansprechen, um ein beliebiges Level zu laden // in dem Ordner "public" quasi Frontendornder, eine neuen Ordner erstellen: "scr" Source // in dem ordner eine neue "index.js" Datei erstellen
+4. in der "index.html datei folgenden code einfügen: `<script type="text/javascript" src="scr/index.js"></script>` // überprüfen via `npm start` // diese Zeile lädt das frontend in die HTML datei
+5. in die eben erstellte "index.js" Datei folgenden code einfügen:
+```js
+// Diser Code ermöglicht dem Browser, dass zuerst das HTML fertig geladen wird und erst danach die js Datei
+window.onload = function() {
+    async function loadLevel(LevelID) {
+        const response = await fetch(`/api/levels/${LevelID}`);
+        const level = await response.json();
+
+        console.log(level);
+    }
+
+    loadLevel(2);
+}
+```
+
+6. /puclic/assets/ neues CSS File erstellen "styles.css"
+7. Das Level in HTML darstellen // In der index.html Datei das "styles.css" laden
+```html
+<link rel="stylesheet" href="assets/styles.css">
+```
+8. in der "index.html" Datei einen container für das Spielfeld erzeugen
+```html
+<div id="playfield"></div>
+```
+9. in der "styles.css" Datei folgenden Code einfügen:
+```css
+#playfield {
+    position: relative;
+
+}
+
+.tile {
+    image-rendering: pixelated;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no- repeat;
+    background-position: center-center;
+}
+```
+10. Das Level optisch gestalten // in der Frontend "index.js" Datei eine `for` Schleife zum...
+
+```js 
+for (let y = 0; y < level.level.length; y += 1) {
+   for (let x = 0; x < level.level[y].length; x += 1) {
+      const char = level.level[y][x];
+
+      drawTile(char, x, y);
+   }
+}
+
+```
+
+
+11.  Frontend "index.js" Datei: Spielfiguren einzeichnen:
+```js
+ drawTile('player', level.player.x, level.player.y);
+```
+
+12.  Frontend "index.js" Datei: Kisten/Boxen einzeichen (mit `for of` Schleife):
+```js
+for (let box of level.boxes) {
+drawTile ('box', box.x, box.y);
+}
+```
+
+13. Die Pfeiltasten der Tastertur dem Spieler zuweisen // Frontende "index.js" Datei: Keylistener einbauen
+```js 
+    document.addEventListener('keydown', (event) => {
+        console.log(event);
+
+        switch (event.code) {
+            case 'ArrwoUP':
+            case 'KeyW':
+
+            case 'ArrwoDown':
+            case 'KeyS':
+
+            case 'ArrwoLeft':
+            case 'KeyA':
+
+            case 'ArrwoRight':
+            case 'KeyD':
+
+                break;
+            default:
+                break;
+        }
+
+    });
+```
+1.  Frontend "index.js" Datei code umschreiben // loadlevel funktion kann nun auch außerhalb verwendet werden
+```js
+// ganz oben im Code umschrieben:
+window.onload = async function () {
+
+// weiter unten im Code umschreiben:
+const level = await loadLevel(2);
+
+```
+
