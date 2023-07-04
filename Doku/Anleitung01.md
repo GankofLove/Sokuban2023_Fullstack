@@ -185,7 +185,7 @@ drawTile ('box', box.x, box.y);
 
     });
 ```
-1.  Frontend "index.js" Datei code umschreiben // loadlevel funktion kann nun auch außerhalb verwendet werden
+14.  Frontend "index.js" Datei code umschreiben // loadlevel funktion kann nun auch außerhalb verwendet werden
 ```js
 // ganz oben im Code umschrieben:
 window.onload = async function () {
@@ -195,3 +195,96 @@ const level = await loadLevel(2);
 
 ```
 
+<br>
+
+---
+
+## **EH20** - 27.06.23
+
+### **Folie Teil 4 - Spiellogik**
+
+Kisten bewegen, Kollisionen prüfen, Wände beachten, etc
+
+1. Neue Function erstellen `checkAndMovePlayer`
+
+```javascript
+
+
+```
+
+<br>
+
+----
+
+## **EH21** - Unterricht verpasst - Mitschrift in EH22 nachgeholt
+
+### **Spiellogik weiter ausbauen und verbessern**
+1. xxxx
+2. xxxx
+
+### **Namenseingabe und Highscore einbauen**
+1. xxxx
+2. xxxx
+
+### **MongoDB als DB integrieren:**
+1. MongoDB free Account einloggen (Github/Email Account)
+2. Neuen "Clustor" erstellen
+3. Connect -> Drivers -> copy "Connecion String"
+4. Connection String kopieren
+5. ".env" Datei auf Projektordnerebene erstellen -> zum verstecken der Passwörter
+6. "Connection String" in die .env Datei einfügen
+7. in der .gitignore Datei ".env" dazuschreiben
+
+```JS
+// Connection String in unserem Fall:
+MONGO_CS="mongodb+srv://janschneider:CodersBay2023@cluster0.mroovdr.mongodb.net/?retryWrites=true&w=majority"
+```
+
+<br>
+
+--- 
+
+## **EH22** - 04.07.2023
+
+### **Fehlerbehebung**
+1. XXXX
+2. XXXX
+   
+
+### **Events voneinander trennen:**
+```js 
+document.getElementById('username').addEventListener('keydown', (event) => {
+event.stopPropagation();
+```
+
+
+### **Highscores speichern und pro Level im Browser anzeigen**
+1. in der "index.html" Datei
+```html
+<h2>Highscores:</h2>
+<div id="scores"></div>
+```
+
+2. Funktion in der Backend "index.js" Datei hinzufügen:
+```js 
+ async function loadAndDisplayHighscores(scores) {
+        let scoresToDisplay = scores;
+        if (!scoresToDisplay) {
+            const response = await fetch(`/api/scores/${levelSelect.value}`);
+            scoresToDisplay = await response.json();
+        }
+        console.log('scoresToDisplay', scoresToDisplay);
+        const scoresEl = document.getElementById('scores');
+        scoresEl.innerHTML = '';
+        scoresToDisplay.forEach((entry, i) => {
+            const scoreEl = document.createElement('div');
+            scoreEl.innerHTML = `<div>${i + 1}. ${entry.name}</div><div>${entry.score}</div>`;
+            scoresEl.appendChild(scoreEl);
+        });
+    }
+```
+nicht vergessen, die Funktion auch wieder aufzurufen!
+
+<br>
+
+---

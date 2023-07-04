@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-
-<!-- HTML Gerüst erstellen -->
-
 <html lang="de">
     <head>
-        <title>Sokuban</title>
+        <!-- Dies ist ein Kommentar -->
+        <!-- HTML Gerüst -->
+        <title>Sokoban</title>
         <script type="text/javascript" src="src/index.js"></script>
         <link rel="stylesheet" href="assets/styles.css">
     </head>
     <body>
-        <h1>Sokuban</h1>
-        <div id="playfield"></div>
+        <h1>Sokoban</h1>
+        <input type="text" id="username" placeholder="Username">
+        <select id="levelSelect"></select>
+        <p>Score: <span id="score">0</span></p>
+        <p>Score with invalid moves: <span id="scoreWithInvalidMoves">0</span></p>
+        <p id="winMessage"></p>
+        <div class="row">
+            <div id="playfield"></div>
+            <div>
+                <h2>Highscores:</h2>
+                <div id="scores"></div>
+            </div>
+        </div>
     </body>
 </html>

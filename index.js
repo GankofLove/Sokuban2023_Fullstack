@@ -1,92 +1,135 @@
-// SERVERANWENDUNG (folgender code von express hompage kopiert)
-
+// SERVER
+import 'dotenv/config';
+import { MongoClient } from 'mongodb';
 import express from 'express';
 import fs from 'node:fs/promises';
 
+// Connection URL
+const url = process.env.MONGO_CS;
+const client = new MongoClient(url);
+
+// Database Name
+const dbName = 'Sokoban';
+
+await client.connect();
+console.log('Connected successfully to database');
+const db = client.db(dbName);
+const collection = db.collection('highscores');
+
+// prepare levels array
 const levels = [];
 
+// read levels data from levels.txt file as string
 const levelData = await fs.readFile('./assets/levels.txt', 'utf8');
 
-function readLevelData() {
-  const splitLevelData = levelData.split('\n\n');
+// function to read and interpret level data
+function readLevelsData() {
+    // split the level data string (which contains the entire file) into the separate levels.
+    const splitLevelData = levelData.split('\n\n');
 
-  // 
-  for (let singleLevelData of splitLevelData) {
-    const level = {
-      level: [],
-      player: {},
-      boxes: [],
-    };
+    // iterate over the levels
+    for (let singleLevelData of splitLevelData) {
+        // prepare the level object
+        const level = {
+            level: [],
+            player: {},
+            boxes: [],
+        };
 
-    // Levels in einzele Zeilen zerlegen (Array Anlegen)
-    const lines = singleLevelData.split('\n');
+        // split level into single lines
+        const lines = singleLevelData.split('\n');
+        // iterate over lines
+        for (let y = 0; y < lines.length; y += 1) {
+            // prepare line to save into level object later
+            const line = [];
+            // iterate over characters of the line
+            for (let x = 0; x < lines[y].length; x += 1) {
+                // get character
+                const char = lines[y][x];
 
-    // über die Zeilen iterrieren (forschleife // for/in schleife)
-    for (let y = 0; y < lines.length; y += 1) {
-      const line = [];
-      // Zeichen für Zeichen durch iterrieren
-      for (let x = 0; x < lines[y].length; x += 1){
-        // speichern der Zeichen um später besser damit arbeiten zu können
-        const char = lines[y][x];
-
-        // Zeichen definieren
-        switch(char) {
-          case '@':
-              line.push('-');
-              level.player.x = x;
-              level.player.y = y;
-              break;
-          case '+':
-              line.push('.');
-              level.player.x = x;
-              level.player.y = y;
-              break;
-          case '$':
-              line.push('-')
-              level.boxes.push({x, y});
-                break;
-          case '*':
-              line.push('.')
-              level.boxes.push({x, y});
-              break;
-              // +, ., -, _ werden von default case gehandelt
-              default:
-              line.push(char);
-              break;
+                // handle character
+                switch (char) {
+                    case '@': // player on floor
+                        line.push('-');
+                        level.player.x = x;
+                        level.player.y = y;
+                        break;
+                    case '+': // player on target
+                        line.push('.');
+                        level.player.x = x;
+                        level.player.y = y;
+                        break;
+                    case '$': // box on floor
+                        line.push('-');
+                        level.boxes.push({ x, y });
+                        break;
+                    case '*': // box on target
+                        line.push('.');
+                        level.boxes.push({ x, y });
+                        break;
+                    default: // other characters: # . - _
+                        line.push(char);
+                        break;
+                }
+            }
+            // add prepared line to level object
+            level.level.push(line);
         }
-      }
-      level.level.push(line);
+        // add level object to levels array
+        levels.push(level);
     }
-    levels.push(level);
-  }
 }
 
-readLevelData();
+// call the function to read level data
+readLevelsData();
 
-const app = express()
-const port = 8080
+// initialize express server
+const app = express();
 
-// sorgt dafür, dass die Daten welche empfangen/gesendet werden JSON sind
-app.get(express.json());
+const port = 8080;
 
-// Route für die REST API zum ansprechen
+// let express read request bodies as json
+app.use(express.json());
+
+// REST API: GET /api/levels - returns count of levels
 app.get('/api/levels', (req, res) => {
-  // Anzahl der existierenden Levels übertrage
-  res.send({count: levels.length});
+    res.send({ count: levels.length });
 });
 
-// Route2 für XXXX
-app.get('/api/levels/:levelID', (req, res) => { //  alles was hinter dem Doppelpunkt sehtht, wird als variable gespeichert
-const levelID = req.params.levelID;
-  console.log(req);
-  res.send(levels[levelID]);
+// REST API: GET /api/levels/:levelId - returns selected level
+app.get('/api/levels/:levelId', (req, res) => {
+    const levelId = req.params.levelId;
+    res.send(levels[levelId]);
 });
 
-app.use(express.static('public')) // code line von express homepage kopiert
+app.get('/api/scores/:levelId', async (req, res) => {
+    const levelId = req.params.levelId;
 
-// Ausgabe
+    const scores = await collection.find({ levelId }).sort({ score: 1 }).limit(10).toArray();
+
+    res.send(scores);
+});
+
+app.post('/api/scores/:levelId', async (req, res) => {
+    const levelId = req.params.levelId;
+
+    const score = {
+        score: req.body.score,
+        name: req.body.name,
+        levelId,
+    };
+
+    const result = await collection.insertOne(score);
+
+    const scores = await collection.find({ levelId }).sort({ score: 1 }).limit(10).toArray();
+
+    res.status(201).send(scores);
+});
+
+// Static file hosting for public folder
+app.use(express.static('public'));
+
+// start the server
 app.listen(port, () => {
-  console.log(`Sokuban Server listening on port ${port}`);
+    console.log(`Sokoban server listening on port ${port}`);
 });
-
-

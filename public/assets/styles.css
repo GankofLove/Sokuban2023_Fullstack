@@ -1,12 +1,24 @@
 #playfield {
     position: relative;
-
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 
 .tile {
-    image-rendering: pixelated;
     position: absolute;
+    image-rendering: pixelated;
     background-size: contain;
-    background-repeat: no- repeat;
-    background-position: center-center;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#scores > div {
+    display: flex;
+    justify-content: space-between;
 }
